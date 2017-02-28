@@ -1,0 +1,25 @@
+#include "minitalk.h"
+
+void send_char(char c, pid_t server_pid)
+{
+	int mask = 0x80; /* mask to get first bit of char */
+	int i;
+	/* loops through each bit of char (8 bits) */
+	for (i = 0; i < 8; i++)
+	{
+		/* translates to signals */
+		if (mask & c)
+		{
+			kill(server_pid, SIGUSR1);
+		}
+		else
+		{
+			kill(server_pid, SIGUSR2);
+		}
+		/* shift */
+		c = c << 1;
+		/* wait until server sends ack */
+		pause();
+	}
+	
+}

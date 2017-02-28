@@ -1,0 +1,33 @@
+#include "my.h"
+
+int my_strncmp(char *a, char *b, int n)
+{
+	if (a != NULL && b != NULL)
+	{
+		int counter = 1;
+		/* if comparing no chars, are all equal? */
+		if (n <= 0)
+		{
+			return 0;
+		}
+		while(*a == *b && counter < n)
+		{
+			if (*a == '\0' || *b == '\0' || counter >= n)
+			{
+				break;
+			}
+			else
+			{
+				a++;
+				b++;
+				counter++;
+			}
+		}
+		return *a - *b;
+	}
+	else
+	{
+		my_str("Error: null string input");
+		
+	}
+}

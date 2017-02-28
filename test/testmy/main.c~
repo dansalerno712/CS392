@@ -1,0 +1,158 @@
+#include "my.h"
+#include <stddef.h>
+#include <limits.h>
+#include <stdio.h>
+int main()
+{
+	char *null = NULL;
+	char a[] = "string";
+ 	char b[] = "";
+	char c[] = "catch";
+	my_str("Testing my_str:\n");
+	my_str("test");
+	my_str("\n");
+	my_str("\0");
+	my_str("\n");
+	my_str(null);
+	my_str("\n");
+	
+	my_str("Testing my_int\n");
+	my_int(12345);
+	my_str("\n");
+	my_int(999);
+        my_str("\n");
+	my_int(-100);
+	my_str("\n");
+	my_int(-99999);
+        my_str("\n");
+	my_int(0);
+	my_str("\n");
+	my_int(INT_MAX);
+	my_str("\n");
+	my_int(INT_MIN);
+	my_str("\n");
+	
+	my_str("Testing my_num_base\n");
+	my_num_base(INT_MIN, "0123456789");
+	my_str("\n");
+	my_num_base(INT_MAX, "0123456789");
+	my_str("\n");
+	my_num_base(0, "0123456789");
+	my_str("\n");
+	my_num_base(16826, "0123456789ABCDEF");
+	my_str("\n");
+	my_num_base(12345678, "01234567");
+	my_str("\n");
+	my_num_base(9, "RTFM");
+	my_str("\n");
+	my_num_base(INT_MIN, "01");
+	my_str("\n");
+	my_num_base(5, "5");
+	my_str("\n");
+	my_num_base(10, "");
+	my_str("\n");
+	my_num_base(10, null);
+	my_str("\n");
+	
+	my_str("Testing my_alpha\n");
+	my_alpha();
+	my_str("\n");
+	
+	my_str("Testing my_digits\n");
+	my_digits();
+	my_str("\n");
+	
+	my_str("Testing my_find\n");
+	my_int(my_find("Hello", 'l'));
+	my_str("\n");
+	my_int(my_find("Hello", 'p'));
+	my_str("\n");
+	my_int(my_find("Hello", 'h'));
+        my_str("\n");
+	my_int(my_find("Hello", 'H'));
+        my_str("\n");
+	my_int(my_find("Hello", '\0'));
+	my_str("\n");
+	my_int(my_find(null, 'l'));
+	my_str("\n");
+	
+	my_str("Testing my_rfind\n");
+	my_int(my_rfind("Hello", 'l'));
+	my_str("\n");
+	my_int(my_rfind("Hello", 'H'));
+        my_str("\n");
+	my_int(my_rfind("Hello", 'h'));
+        my_str("\n");
+	my_int(my_rfind("Hello", 'p'));
+	my_str("\n");
+	my_int(my_rfind("Hello", '\0'));
+	my_str("\n");
+	my_int(my_rfind(null, 'l'));
+	my_str("\n");
+	
+	my_str("Testing my_strlen\n");
+	my_int(my_strlen("test"));
+	my_str("\n");
+	my_int(my_strlen("\0"));
+	my_str("\n");
+	my_int(my_strlen(null));
+	my_str("\n");
+	
+	my_str("Testing my_revstr\n");
+	my_int(my_revstr(a));
+	my_str("\n");
+	my_str(a);
+	my_str("\n");
+	my_int(my_revstr(c));
+        my_str("\n");
+        my_str(c);
+        my_str("\n");
+	my_int(my_revstr(b));
+	my_str("\n");
+	my_int(my_revstr(null));
+	my_str("\n");
+	
+	my_str("Testing my_strindex\n");
+	my_char(*my_strindex("hello", 'l'));
+	my_char('\n');
+	my_char(*my_strindex(a, 's'));
+	my_char('\n');
+	//how to test for not found char
+
+	my_str("Testing my_strrindex\n");
+	my_char(*my_strrindex("hello", 'l'));
+	my_char('\n');
+	
+	my_str("Testing my_strcat\n");
+	char one[20] = "hello";
+	char two[] = "world";
+	my_str(my_strcat(one, two));
+	my_char('\n');
+	my_str(my_strcat(null, two));
+	my_char('\n');
+	
+	my_str("Testing my_strcmp\n");
+	my_int(my_strcmp("hello", "hello"));
+	my_char('\n');
+	my_int(my_strcmp("appple", "banana"));
+	my_char('\n');
+	my_int(my_strcmp("banana", "apple"));
+	my_char('\n');
+	my_int(my_strcmp("aaa", "g"));
+	my_char('\n');
+
+	my_str("Testing my_strncmp\n");
+        my_int(my_strncmp("hello", "hello", 100));
+        my_char('\n');
+        my_int(my_strncmp("appple", "banana", 100));
+        my_char('\n');
+        my_int(my_strncmp("banana", "apple", 100));
+        my_char('\n');
+        my_int(my_strncmp("aaa", "g", 100));
+        my_char('\n');
+	my_int(my_strncmp("aaa", "aaaaabcd", 3));
+        my_char('\n');
+
+
+	return 0;
+}

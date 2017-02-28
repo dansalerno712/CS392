@@ -1,0 +1,110 @@
+#include "sockettalk.h"
+
+int main(int argc, char **argv)
+{
+	int sockfd, portno, n;
+	struct sockaddr_in serv_addr;
+	struct hostent *server;
+	char buf[MAX_BUFFER_SIZE];
+	fd_set master;
+	fd_set read_fds;
+	char *username;
+	/* usage */
+	if (argc != 3)
+	{
+		my_str("usage: ./client [host] [port]\n");
+		exit(0);
+	}
+	/* setup fdsets */
+	FD_ZERO(&master);
+	FD_ZERO(&read_fds);
+	/* get username */
+	username = NULL;
+	do {
+		my_str("Enter a username: ");
+		n = read(0, buf, MAX_BUFFER_SIZE - 1);
+		if (n < 0)
+			perror("read() error"), exit(EXIT_FAILURE);
+		buf[n - 1] = '\0'; /* remove newline */
+		username = my_strdup(buf);
+	} while (my_strlen(username) < 1);
+	/* get port no */
+	portno = my_atoi(argv[2]);
+	if (portno < 0)
+	{
+		my_str("invalid port number\n");
+		exit(EXIT_FAILURE);
+	}
+	/*socket */
+	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+		perror("socket() error"), exit(EXIT_FAILURE);
+	my_str("socket() success\n");
+	/* get server */
+	server = gethostbyname(argv[1]);
+	if (server == NULL)
+		perror("gethostbyname() error"), exit(EXIT_FAILURE);
+	my_str("host found\n");
+	/* setup serv_addr */
+	bzero((char *)&serv_addr, sizeof(serv_addr));
+	serv_addr.sin_family = AF_INET;
+	bcopy((char *)server->h_addr,
+	      (char *)&serv_addr.sin_addr.s_addr,
+	      server->h_length);
+	serv_addr.sin_port = htons(portno);
+	/* connect */
+	if(connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+		perror("connect() error"), exit(EXIT_FAILURE);
+	my_str("connected to server\n");
+	/* send server username */
+	if (write(sockfd, username, my_strlen(username)) < 0)
+		perror("write error"), exit(EXIT_FAILURE);
+	/* setup fdset */
+	FD_SET(sockfd, &master);
+	FD_SET(0, &master);
+	while (1)
+	{
+		/* select */
+		read_fds = master;
+		if (select(sockfd + 1, &read_fds, NULL, NULL, NULL) < 0)
+			perror("select() failure"), exit(EXIT_FAILURE);
+		/* if user entered message */
+		if (FD_ISSET(0, &read_fds))
+		{
+			n = read(0, buf, MAX_BUFFER_SIZE - 1);
+			if (n < 0)
+				perror("read() error"), exit(EXIT_FAILURE);
+       			buf[n - 1] = '\0'; /* removed newline */
+			/* if they want to exit, exit */
+			if (my_strcmp(buf, "/exit") == 0)
+			{
+				my_str("Disconnected\n");
+				close(sockfd);
+				exit(0);
+			}
+			else
+			{
+				if (write(sockfd, buf, my_strlen(buf)) < 0)
+					perror("write error"), exit(EXIT_FAILURE);
+			}
+		}
+		/* if received message */
+		if (FD_ISSET(sockfd, &read_fds))
+		{
+			n = read(sockfd, buf, MAX_BUFFER_SIZE - 1);
+			if (n < 0)
+				perror("read error"), exit(EXIT_FAILURE);
+			if (n == 0) /* if disconnected */
+			{
+				my_str("Disconnected\n");
+				close(sockfd);
+				exit(0);
+			}
+			else
+			{
+				buf[n] = '\0';
+				my_str(buf);
+			}
+		}
+	}
+	return 0;
+}

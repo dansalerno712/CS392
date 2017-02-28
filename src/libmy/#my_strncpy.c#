@@ -1,0 +1,46 @@
+#include "my.h"
+
+char *my_strcpy(char *a, char *b)
+{
+  if (b != NULL)
+    {
+      int pos = 0;
+      while(1)
+	{
+	  a[pos] = b[pos];
+	  if (b[pos] == '\0')
+	    {
+	      break;
+	    }
+	  pos++;
+	}
+      return a;
+    }
+  else
+    {
+      return NULL;
+    }
+}
+#include "my.h"
+
+char *my_strncpy(char *a, char *b, int n)
+{
+  if (b != NULL)
+    {
+      int pos = 0;
+      while(1)
+	{
+	  a[pos] = b[pos];
+	  if (b[pos] == '\0')
+	    {
+	      break;
+	    }
+	  pos++;
+	}
+      return a;
+    }
+  else
+    {
+      return NULL;
+    }
+}
